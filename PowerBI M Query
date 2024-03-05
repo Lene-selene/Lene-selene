@@ -1,0 +1,11 @@
+Filter as of Currrent Month - System Date with 1st Date of Month - Last Date of Month
+
+let
+    Source = Excel.CurrentWorkbook(){[Name="Leavers"]}[Content],
+    #"Company filtered" = Table.SelectRows(Source, each ([#"Company - ID"] = "NL15")),
+    #"Changed Type1" = Table.TransformColumnTypes(#"Company filtered",{{"Date of Separation", type date}, {"Termination date", type date}}),
+    #"Date Filtered" = Table.SelectRows(#"Changed Type1", each [Date of Separation] >= Date.StartOfMonth(Date.AddMonths(Date.From(DateTime.LocalNow()),-1)) and [Date of Separation] <= Date.EndOfMonth(Date.From(DateTime.LocalNow()))),
+    #"Removed Other Columns" = Table.SelectColumns(#"Date Filtered",{"Employee ID", "Worker", "Gender", "Compensation Grade", "Management Level", "Location", "Company - ID", "Position", "Position ID", "Supervisory Organization", "Supervisory Organization - ID", "Business Process Reason", "Date of Separation"}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"Employee ID", Int64.Type}, {"Worker", type text}, {"Gender", type text}, {"Position", type text}, {"Company - ID", type text}, {"Compensation Grade", type text}, {"Management Level", type text}, {"Location", type text}, {"Position ID", Int64.Type}, {"Supervisory Organization", type text}, {"Supervisory Organization - ID", type text}, {"Business Process Reason", type text}})
+in
+    #"Changed Type"
