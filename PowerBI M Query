@@ -1,4 +1,4 @@
-Filter as of Currrent Month - System Date with 1st Date of Month - Last Date of Month
+Filter as of Currrent Date - System Date with 1st Date of Month - Last Date of Month
 
 let
     Source = Excel.CurrentWorkbook(){[Name="Leavers"]}[Content],
@@ -9,3 +9,28 @@ let
     #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"Employee ID", Int64.Type}, {"Worker", type text}, {"Gender", type text}, {"Position", type text}, {"Company - ID", type text}, {"Compensation Grade", type text}, {"Management Level", type text}, {"Location", type text}, {"Position ID", Int64.Type}, {"Supervisory Organization", type text}, {"Supervisory Organization - ID", type text}, {"Business Process Reason", type text}})
 in
     #"Changed Type"
+
+
+Filtered as of Current Month - Date Local Time
+
+let
+    Source = #"SAP_Dependents (All Family)",
+    #"Relationship filtered" = Table.SelectRows(Source, each [Type of Family Record] = "Child" or [Type of Family Record] = "Stepchild"),
+    #"Age Filtered" = Table.SelectRows(#"Relationship filtered", each [Age] = 21),
+    #"Added on Month of Birth" = Table.AddColumn(#"Age Filtered", "Month Name", each Date.Month([Birth date]), Int8.Type),
+    #"Filtered Rows" = Table.SelectRows(#"Added on Month of Birth", each ([Month Name] = Date.Month(DateTime.LocalNow())))
+in
+    #"Filtered Rows"
+
+// 
+
+let
+    Source = #"SAP_Dependents (All Family)",
+    #"Relationship filtered" = Table.SelectRows(Source, each [Type of Family Record] = "Child" or [Type of Family Record] = "Stepchild"),
+    #"Age Filtered" = Table.SelectRows(#"Relationship filtered", each [Age] = 21),
+    #"Added on Month of Birth" = Table.AddColumn(#"Age Filtered", "Month Name", each Date.Month([Birth date]), Int8.Type),
+    #"Custom Filtered on Current Month" = Table.AddColumn(#"Added on Month of Birth", "Current Month Indicator", each if Date.Month(DateTime.LocalNow())=[Month Name] then "Current Month" else "Not Current Month"),
+    #"CurrentMonth Selected - filtered" = Table.SelectRows(#"Custom Filtered on Current Month", each ([Current Month Indicator] = "Current Month")),
+    #"Removed Columns" = Table.RemoveColumns(#"CurrentMonth Selected - filtered",{"Month Name", "Current Month Indicator"})
+in
+    #"Removed Columns"
