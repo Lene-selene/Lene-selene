@@ -1,0 +1,8 @@
+PowerBI M Query Date Function - Filter Quater Months and LastMonth Data
+
+
+  #"Filtered Rows" = Table.SelectRows(#"Changed Type1", each Date.Month([Reporting Period]) = 3 or Date.Month([Reporting Period]) = 6 or Date.Month([Reporting Period]) = 9 or Date.Month([Reporting Period]) = 12 or Date.IsInPreviousNMonths([Reporting Period],1))
+
+// Explanation:-
+1. Date.Month will need to be added under Date datatype which it will automatically captured the Month from the date data
+2. Date.IsInPreviousNMonths([Column Name],1)) - the no. in the back = previous n months. You can do this using the Date.IsInPreviousNMonths function on your [Date] column. Here, n is the number of months you want to check. 
