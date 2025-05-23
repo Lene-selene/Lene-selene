@@ -1,0 +1,17 @@
+// Return Values from Previous Rows
+   
+a) Group Primary Key and insert Index columns for Primary Key
+
+    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"Employee ID"}, {{"Detail", each _, type table [Reporting Period=nullable date, Employee ID=nullable number, #"Employee ID-Reporting Period"=nullable text, Business Unit=nullable text, Compensation Grade=nullable text, #"EC-1"=nullable text, #"EC-2"=nullable text, #"EC-3"=nullable text, #"EC-4"=nullable text, #"EC-5"=nullable text, #"EC-6"=nullable text, Position=nullable text, Position ID=nullable number]}}),
+    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "IndexDetails", each Table.AddIndexColumn([Detail], "Index", 1, 1, Int64.Type)),  
+
+
+b) Table.Buffer Table before Merging to ensure that the table won't messed out
+
+    #"Buffer" = Table.Buffer( #"Sorted Rows1"),
+    #"Merged Queries1" = Table.NestedJoin(Buffer, {"Subtraction", "Employee ID"}, Buffer, {"Index", "Employee ID"}, "Buffer", JoinKind.LeftOuter),
+
+
+Additional reference:
+  a) Group by: https://gorilla.bi/power-query/get-previous-row-value/
+  b) Table.Buffer: https://community.fabric.microsoft.com/t5/Power-Query/Change-in-Index-After-Expanding-Merged-Table-Columns/td-p/1602578
