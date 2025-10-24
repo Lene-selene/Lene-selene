@@ -1,0 +1,41 @@
+#"Split Column by Delimiter" = Table.TransformColumns(#"Reordered Columns",
+  {{"Position", each let delimiters = {"(Position Vacate:", "(On Leave)", "(Close:"}, --// delimiter that you would want to remove
+    positions = List.Transform(delimiters, (d) => Text.PositionOf(_, d)),
+    foundPositions = List.Select(positions, (p) => p >= 0),
+    firstPos = if List.Count(foundPositions) > 0 then List.Min(foundPositions) else -1
+      in
+    if firstPos = -1 then _ else Text.Start(_, firstPos),
+    type text}})
+
+____________________________________________________________________________________________________________________________________________________
+
+-- // Explanation:
+
+Target Column: "Position" — this is the column being transformed.
+
+Delimiters:
+A list of substrings that indicate where the meaningful part of the text ends:
+
+"(Position Vacate:"
+"(On Leave)"
+"(Close:"
+
+Find Positions:
+
+Text.PositionOf(_, d) finds the position of each delimiter in the text.
+List.Transform applies this to each delimiter.
+List.Select(... >= 0) filters out delimiters that weren’t found.
+
+Get First Match:
+
+If any delimiter is found, it takes the earliest one (List.Min).
+If none are found, it sets firstPos = -1.
+
+Trim Text:
+
+If firstPos = -1, return the original text.
+Otherwise, return the substring from the start up to the first delimiter (Text.Start(_, firstPos)).
+
+
+
+Output Type: Ensures the result is of type text.
