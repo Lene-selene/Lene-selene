@@ -1,0 +1,17 @@
+
+   #"Grouped Rows" = Table.Group(#"Removed Duplicates",{"Employee ID-Reporting Period"}, {{"TotalCount", each Table.RowCount(_), Int64.Type},
+
+     // All Work Experience merged
+    {"AllMerged", each Text.Combine(List.Distinct(Table.Column(_, "Work Experience")), ","), type text},
+
+    // Early counts + merged
+    {"EarlyCount", each List.Count(List.Select(Table.Column(_, "Total Relevant Experience"), (c) => c = "6")), -- // conditions of the scenarios 
+    Int64.Type},{"EarlyCountList", each Text.Combine(List.Distinct(List.Transform(List.Select(List.Zip({Table.Column(_, "Work Experience"), 
+    Table.Column(_, "Total Relevant Experience")}),each _{1} = "6"), each _{0})), ","), type text},
+
+    // Mid counts + merged
+    {"MidCount", each List.Count(List.Select(Table.Column(_, "Total Relevant Experience"), (c) => c = "13")), Int64.Type},{"MidCountList", each Text.Combine(List.Distinct(List.Transform(List.Select(List.Zip({Table.Column(_, "Work Experience"), Table.Column(_, "Total Relevant Experience")}),each _{1} = "13"),each _{0})), ","), type text},
+
+        // Final counts + merged
+        {"FinalCount", each List.Count(List.Select(Table.Column(_, "Total Relevant Experience"), (c) => c = "4")), Int64.Type},{"FinalCountList", each Text.Combine(List.Distinct(List.Transform(List.Select(List.Zip({Table.Column(_, "Work Experience"), Table.Column(_, "Total Relevant Experience")}),each _{1} = "4"),each _{0})), ","), type text}}),
+   
