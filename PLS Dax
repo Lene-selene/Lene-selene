@@ -1,0 +1,6 @@
+var __PLSAccess = 
+    CALCULATE(COUNT('Access Level - Hierarchy'[Email]),
+    FILTER('Access Level - Hierarchy','Access Level - Hierarchy'[Email] = USERPRINCIPALNAME() && 'Access Level - Hierarchy'[PLS Access] = "FullAccess"))
+
+RETURN 
+If(__PLSAccess > 0, [FullAccess] == TRUE(), [PartiallyAccess] == TRUE())
