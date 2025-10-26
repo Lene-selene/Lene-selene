@@ -1,0 +1,17 @@
+1. RLS Code:
+PATHCONTAINS(
+    'EOM_for_IM'[PathwayAll],
+    CALCULATE(MAX('EOM_for_IM'[Employee ID]),
+        FILTER('EOM_for_IM','EOM_for_IM'[Email] = USERPRINCIPALNAME())))
+
+2. Mapped Org Lvl
+PATH = 	Returns a delimited text string with the identifiers of all the parents of the current identifier.
+Example: 
+PathwayAll = PATH('Table'[Employee ID],'Table'[Manager_ID])
+Return: 130673|13714|31976|56272|658819|192602
+
+3. Checking Sequence of EmployeeID appeared 
+PATHLENGH = 	Returns the number of parents to the specified item in a given PATH result, including self.
+PathLen = PATHLENGTH('Table'[PATH DAX])
+
+other PATH: https://learn.microsoft.com/en-us/dax/parent-and-child-functions-dax
