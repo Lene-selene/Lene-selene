@@ -1,3 +1,9 @@
+
+1. RLS set at PageLevelSecruity Table where you have a list of pages with different users accesss/view that is True/False
+2. Build relationship with PageLevelSecruity Table Access with List of Page (Filter Selection)
+3. Build normal RLS with userprincipalname
+4. Build RLS + PLS as DAX below
+
 var __PLSAccess = 
     CALCULATE(COUNT('Access Level - Hierarchy'[Email]),
     FILTER('Access Level - Hierarchy','Access Level - Hierarchy'[Email] = USERPRINCIPALNAME() && 'Access Level - Hierarchy'[PLS Access] = "FullAccess"))
