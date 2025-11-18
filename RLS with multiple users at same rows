@@ -1,0 +1,39 @@
+containsstring to included all users
+
+
+VAR CurrentUser =
+    LOWER ( USERPRINCIPALNAME () )
+
+//VAR IsTA =
+    COUNTROWS (
+        FILTER (
+            'cr4f8_employeecompensationrecord',
+            CONTAINSSTRING (
+                LOWER ( 'cr4f8_employeecompensationrecord'[TA_Email] ),
+                CurrentUser
+            )
+        )
+    ) > 0
+
+RETURN
+    IsTA
+    ||
+    CONTAINSSTRING (
+        LOWER ( 'cr4f8_employeecompensationrecord'[HF_Email] ),
+        CurrentUser
+    )
+    ||
+    CONTAINSSTRING (
+        LOWER ( 'cr4f8_employeecompensationrecord'[Panel_1_Email] ),
+        CurrentUser
+    )
+    ||
+    CONTAINSSTRING (
+        LOWER ( 'cr4f8_employeecompensationrecord'[Panel_2_Email] ),
+        CurrentUser
+    )
+    ||
+    CONTAINSSTRING (
+        LOWER ( 'cr4f8_employeecompensationrecord'[Panel_1_Email] ),
+        CurrentUser
+    )
