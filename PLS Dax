@@ -5,8 +5,8 @@
 4. Build RLS + PLS as DAX below
 
 var __PLSAccess = 
-    CALCULATE(COUNT('Access Level - Hierarchy'[Email]),
-    FILTER('Access Level - Hierarchy','Access Level - Hierarchy'[Email] = USERPRINCIPALNAME() && 'Access Level - Hierarchy'[PLS Access] = "FullAccess"))
+    CALCULATE(COUNT('AccessTable'[Email]),
+    FILTER('AccessTable','AccessTable'[Email] = USERPRINCIPALNAME() && 'AccessTable'[PLS Access] = "FullAccess"))
 
 RETURN 
 If(__PLSAccess > 0, [FullAccess] == TRUE(), [PartiallyAccess] == TRUE())
