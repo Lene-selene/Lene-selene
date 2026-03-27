@@ -1,17 +1,14 @@
-DynamicLengendSexualOrientation = 
+Dynamic Lengend PBI Svg = 
 VAR _Value =
-    SELECTEDVALUE('01 Employee & Promotion Data'[Sexual Orientation (Locale Sensitive)])
+    SELECTEDVALUE('Table'[LengendField])
 
 VAR _Color =
     SWITCH(
         _Value,
-        "Bisexual",              "%2386207C", - change # into %23 
-        "Heterosexual/ straight","%23616161",
-        "I use another term",    "%23336094",
-        "Lesbian/Gay",           "%23FFACA0",
-        "Prefer not to answer",  "%23C0C0C0",
-        "Queer",                 "%23008557",
-        "%237F7F7F"
+        "A",            "%HEXCode", - change # into %23 
+        "B",            "%HEXCode",
+        "C",            "%HEXCode",
+                        "%HEXCode"
     )
 
 VAR _SVG =
